@@ -12,7 +12,7 @@ COPY . .
 
 RUN pnpm run build
 
-RUN pnpm prune --prod
+RUN pnpm prune --prod --ignore-scripts
 
 EXPOSE 8000
 

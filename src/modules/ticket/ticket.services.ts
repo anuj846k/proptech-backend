@@ -238,7 +238,6 @@ export const assignTicketService = async (
     throw new AppError('Property not found', 404);
   }
 
-  // Allow if user is owner OR manager
   const isOwner = property.ownerId === userId;
   const isManager = property.managerId === userId;
 
@@ -298,10 +297,7 @@ export const assignTicketService = async (
   return updated;
 };
 
-/**
- * Updates ticket priority and/or status. Manager or Owner must have access.
- * Creates STATUS_CHANGED activity log for each change.
- */
+
 export const updateTicketService = async (
   ticketId: string,
   userId: string,
@@ -322,7 +318,6 @@ export const updateTicketService = async (
     throw new AppError('Property not found', 404);
   }
 
-  // Allow if user is owner OR manager
   const isOwner = property.ownerId === userId;
   const isManager = property.managerId === userId;
 

@@ -54,12 +54,10 @@ export const findUserById = async (id: string) => {
 export const listUsers = async (role?: UserRole): Promise<PublicUser[]> => {
   const query = db.select().from(users);
 
-  // simple conditional filter; with drizzle you usually build query conditionally
   const rows = role
     ? await db.select().from(users).where(eq(users.role, role))
     : await query;
 
-  // map to public shape if needed (e.g. omit passwordHash)
   return rows.map((u) => ({
     id: u.id,
     name: u.name,

@@ -25,7 +25,6 @@ if (missingVars.length > 0) {
   );
 }
 
-// Cloudinary config - optional, skip validation entirely if not fully configured
 const cloudinaryVars = [
   'CLOUDINARY_CLOUD_NAME',
   'CLOUDINARY_API_KEY',

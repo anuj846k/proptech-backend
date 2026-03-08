@@ -10,7 +10,6 @@ import { isAuthenticated, authorizeRoles } from '../user/user.middlewares';
 
 const propertyRouter: Router = Router();
 
-// POST /api/v1/properties
 propertyRouter.post(
   '/',
   isAuthenticated,
@@ -18,7 +17,6 @@ propertyRouter.post(
   createPropertyController,
 );
 
-// GET /api/v1/properties
 propertyRouter.get(
   '/',
   isAuthenticated,
@@ -26,7 +24,6 @@ propertyRouter.get(
   getPropertiesController,
 );
 
-// GET /api/v1/properties/:id
 propertyRouter.get(
   '/:id',
   isAuthenticated,
@@ -34,7 +31,6 @@ propertyRouter.get(
   getPropertyByIdController,
 );
 
-// POST /api/v1/properties/:id/assign-manager
 propertyRouter.post(
   '/:id/assign-manager',
   isAuthenticated,
@@ -42,7 +38,6 @@ propertyRouter.post(
   assignManagerController,
 );
 
-// POST /api/v1/properties/:id/units
 propertyRouter.post(
   '/:id/units',
   isAuthenticated,

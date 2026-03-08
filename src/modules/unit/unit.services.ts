@@ -1,10 +1,7 @@
 import { AppError } from '#utils/error';
 import logger from '#utils/logger';
 import type { CreateUnitInput } from '#validations/unit.validations';
-import {
-  createUnit,
-  findUnitByPropertyAndNumber,
-} from './unit.repositories';
+import { createUnit, findUnitByPropertyAndNumber } from './unit.repositories';
 import { findPropertyById } from '../property/property.repositories';
 
 export const createUnitService = async (
@@ -18,7 +15,6 @@ export const createUnitService = async (
     throw new AppError('Property not found', 404);
   }
 
-  // Allow if user is owner OR manager
   const isOwner = property.ownerId === userId;
   const isManager = property.managerId === userId;
 

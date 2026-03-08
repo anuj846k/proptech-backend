@@ -75,7 +75,6 @@ export const getPropertyByIdService = async (
     throw new AppError('Property not found', 404);
   }
 
-  // Allow access if user is owner OR manager
   const isOwner = property.ownerId === userId;
   const isManager = property.managerId === userId;
 
@@ -101,7 +100,6 @@ export const assignManagerToPropertyService = async (
     throw new AppError('Property not found', 404);
   }
 
-  // Only owner can assign manager
   if (property.ownerId !== ownerId) {
     throw new AppError('Only the owner can assign a manager', 403);
   }

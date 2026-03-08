@@ -11,12 +11,14 @@ services:
       - '8000'
     restart: unless-stopped
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - '80:80'
-    volumes:
-      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - app
-    restart: unless-stopped
+nginx:
+  image: nginx:latest
+  ports:
+    - '80:80'
+    - '443:443'
+  volumes:
+    - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
+    - /etc/letsencrypt:/etc/letsencrypt:ro
+  depends_on:
+    - app
+  restart: unless-stopped

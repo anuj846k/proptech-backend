@@ -131,3 +131,27 @@ docker compose -f docker-compose.prod.yml down
 - **Docker dev**: test the app inside containers with nginx and live reload
 - **Docker prod**: validate the production image + nginx configuration locally (same pattern you’d run in staging/production)
 
+---
+
+## 6. Deploy to EC2 (GitHub Actions)
+
+The workflow in `.github/workflows/deploy.yml` runs on **push to `main`** (or manually via “Run workflow”). It rsyncs the backend to EC2 and runs `docker compose -f docker-compose.prod.yml up -d --build`.
+
+**One-time setup on EC2**
+
+- Docker and Docker Compose installed
+- Domain and Certbot configured (e.g. `/etc/letsencrypt` for `prop-tech.live` / `api.prop-tech.live`)
+- A deploy directory created, e.g. `mkdir -p /home/ec2-user/proptech-backend`
+- A **`.env`** file in that directory (same variables as `.env.example`); the workflow does **not** overwrite `.env`
+
+**GitHub repository secrets** (Settings → Secrets and variables → Actions):
+
+| Secret | Example | Description |
+|--------|--------|-------------|
+| `EC2_HOST` | `api.prop-tech.live` or EC2 public IP | SSH host |
+| `EC2_USER` | `ec2-user` (Amazon Linux) or `ubuntu` | SSH user |
+| `EC2_SSH_PRIVATE_KEY` | Contents of your `.pem` key | Private key for SSH |
+| `EC2_DEPLOY_PATH` | `/home/ec2-user/proptech-backend` | Absolute path to the app on EC2 |
+
+First run: ensure `.env` exists at `EC2_DEPLOY_PATH` on the server before triggering the workflow.
+

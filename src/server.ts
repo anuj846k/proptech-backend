@@ -3,7 +3,6 @@ import app from './app';
 
 const PORT = Number(process.env.PORT) || 8000;
 
-// Handle uncaught exceptions
 process.on('uncaughtException', (error: Error) => {
   logger.error(`Uncaught Exception: ${error.message}`, {
     stack: error.stack,
@@ -11,7 +10,6 @@ process.on('uncaughtException', (error: Error) => {
   process.exit(1);
 });
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (reason: unknown) => {
   logger.error(`Unhandled Rejection: ${reason}`);
   process.exit(1);
@@ -30,7 +28,6 @@ server.on('error', (error: NodeJS.ErrnoException) => {
   process.exit(1);
 });
 
-// Graceful shutdown
 const shutdown = () => {
   logger.info('Shutting down gracefully...');
   server.close(() => {

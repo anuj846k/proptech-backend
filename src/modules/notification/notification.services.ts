@@ -21,8 +21,7 @@ export const createNotificationService = async (
     logger.info(
       `Created notification for userId=${userId} ticketId=${ticketId}`,
     );
-  }
-  else {
+  } else {
     logger.warn(
       `Failed to create notification for userId=${userId} ticketId=${ticketId}`,
     );
@@ -30,14 +29,12 @@ export const createNotificationService = async (
   return notification;
 };
 
-// "Get my notifications" – just load them for this user
 export const getMyNotificationsService = async (userId: string) => {
   const list = await findNotificationsByUserId(userId);
   logger.info(`Fetched ${list.length} notifications for userId=${userId}`);
   return list;
 };
 
-// "Mark one as read" – only if it exists and it's yours
 export const markAsReadService = async (
   notificationId: string,
   userId: string,

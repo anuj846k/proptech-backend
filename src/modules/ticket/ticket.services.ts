@@ -297,7 +297,6 @@ export const assignTicketService = async (
   return updated;
 };
 
-
 export const updateTicketService = async (
   ticketId: string,
   userId: string,

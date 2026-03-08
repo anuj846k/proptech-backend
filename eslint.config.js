@@ -8,6 +8,9 @@ export default [
   js.configs.recommended,
 
   ...tseslint.configs.recommended,
+  {
+    ignores: ['dist/**'],
+  },
 
   {
     plugins: {
@@ -15,7 +18,6 @@ export default [
       'unused-imports': unusedImports,
       security: security,
     },
-
     rules: {
       // Prevent unused variables
       'no-unused-vars': 'off',

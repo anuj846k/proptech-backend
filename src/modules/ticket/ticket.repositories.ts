@@ -1,10 +1,7 @@
 import { desc, eq, and } from 'drizzle-orm';
 import { db } from '#db/db';
 import { ticketImages, tickets } from './ticket.models';
-import {
-  activityLogs,
-  type actionTypeEnum,
-} from '../activity/activity.models';
+import { activityLogs, type actionTypeEnum } from '../activity/activity.models';
 import { properties } from '../property/property.models';
 import { units } from '../unit/unit.models';
 

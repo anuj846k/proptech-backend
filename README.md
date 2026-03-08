@@ -146,12 +146,11 @@ The workflow in `.github/workflows/deploy.yml` runs on **push to `main`** (or ma
 
 **GitHub repository secrets** (Settings → Secrets and variables → Actions):
 
-| Secret | Example | Description |
-|--------|--------|-------------|
-| `EC2_HOST` | `api.prop-tech.live` or EC2 public IP | SSH host |
-| `EC2_USER` | `ec2-user` (Amazon Linux) or `ubuntu` | SSH user |
-| `EC2_SSH_PRIVATE_KEY` | Contents of your `.pem` key | Private key for SSH |
-| `EC2_DEPLOY_PATH` | `/home/ec2-user/proptech-backend` | Absolute path to the app on EC2 |
+| Secret                | Example                               | Description                     |
+| --------------------- | ------------------------------------- | ------------------------------- |
+| `EC2_HOST`            | `api.prop-tech.live` or EC2 public IP | SSH host                        |
+| `EC2_USER`            | `ec2-user` (Amazon Linux) or `ubuntu` | SSH user                        |
+| `EC2_SSH_PRIVATE_KEY` | Contents of your `.pem` key           | Private key for SSH             |
+| `EC2_DEPLOY_PATH`     | `/home/ec2-user/proptech-backend`     | Absolute path to the app on EC2 |
 
 First run: ensure `.env` exists at `EC2_DEPLOY_PATH` on the server before triggering the workflow.
-

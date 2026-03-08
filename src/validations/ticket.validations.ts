@@ -30,8 +30,7 @@ export const ticketListQuerySchema = z.object({
 });
 
 export const ticketAssignSchema = z.object({
-  technicianId: z
-    .uuid({ message: 'Invalid technician ID' }),
+  technicianId: z.uuid({ message: 'Invalid technician ID' }),
 });
 
 export type TicketAssignInput = z.infer<typeof ticketAssignSchema>;

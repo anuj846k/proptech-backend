@@ -2,9 +2,12 @@ import type { Request, Response, NextFunction } from 'express';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import logger from '#utils/logger';
 
+const points = parseInt(process.env.RATE_LIMIT_POINTS || '300', 10);
+const duration = parseInt(process.env.RATE_LIMIT_DURATION || '60', 10);
+
 const rateLimiter = new RateLimiterMemory({
-  points: 100,
-  duration: 900,
+  points,
+  duration,
 });
 
 export const rateLimiterMiddleware = async (

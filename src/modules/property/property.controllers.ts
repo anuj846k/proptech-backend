@@ -10,6 +10,7 @@ import {
 import {
   assignManagerToPropertyService,
   createPropertyService,
+  getOccupancyService,
   getPropertiesService,
   getPropertyByIdService,
 } from './property.services';
@@ -88,4 +89,16 @@ export const assignManagerController = asyncHandler(async (req, res) => {
     parseResult.data.managerId,
   );
   return successResponse(res, 'Manager assigned successfully', { property });
+});
+
+export const getOccupancyController = asyncHandler(async (req, res) => {
+  const user = req.user;
+  if (!user || !user.userId || !user.role) {
+    throw new AppError('Unauthorized', 401);
+  }
+  logger.info(
+    `getOccupancyController for userId=${user.userId} role=${user.role}`,
+  );
+  const occupancy = await getOccupancyService(user.userId, user.role);
+  return successResponse(res, 'Occupancy fetched successfully', { occupancy });
 });

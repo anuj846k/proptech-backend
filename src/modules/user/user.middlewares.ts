@@ -9,7 +9,11 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.access_token;
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith('Bearer ')
+    ? authHeader.slice(7)
+    : null;
+  const token = bearerToken || req.cookies.access_token;
 
   if (!token) {
     logger.warn(

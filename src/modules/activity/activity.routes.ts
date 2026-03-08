@@ -7,7 +7,7 @@ const activityRouter: Router = Router();
 activityRouter.get(
   '/:id',
   isAuthenticated,
-  authorizeRoles('MANAGER', 'TENANT', 'TECHNICIAN'),
+  authorizeRoles('ADMIN', 'MANAGER', 'TENANT', 'TECHNICIAN'),
   getTicketActivityController,
 );
 

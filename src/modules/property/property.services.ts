@@ -3,6 +3,8 @@ import logger from '#utils/logger';
 import type { PropertyCreateInput } from '#validations/property.validations';
 import {
   createProperty,
+  findOccupancyByManagerId,
+  findOccupancyByOwnerId,
   findPropertiesByManagerId,
   findPropertiesByOwnerId,
   findPropertyById,
@@ -117,4 +119,28 @@ export const assignManagerToPropertyService = async (
     `Property ${propertyId} assigned to manager ${newManagerId} by owner ${ownerId}`,
   );
   return updated;
+};
+
+export const getOccupancyService = async (userId: string, role: string) => {
+  try {
+    if (role === 'ADMIN') {
+      const results = await findOccupancyByOwnerId(userId);
+      logger.info(
+        `Fetched occupancy for ${results.length} properties (ownerId=${userId})`,
+      );
+      return results;
+    }
+    if (role === 'MANAGER') {
+      const results = await findOccupancyByManagerId(userId);
+      logger.info(
+        `Fetched occupancy for ${results.length} properties (managerId=${userId})`,
+      );
+      return results;
+    }
+    throw new AppError('Unauthorized', 403);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    logger.error(`getOccupancyService error: ${message}`);
+    throw error;
+  }
 };

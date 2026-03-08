@@ -75,3 +75,51 @@ export const updatePropertyManager = async (
     .returning();
   return updated ?? null;
 };
+
+export type OccupancyRow = {
+  propertyId: string;
+  propertyName: string;
+  totalUnits: number;
+  occupiedCount: number;
+  vacantCount: number;
+};
+
+export const findOccupancyByOwnerId = async (
+  ownerId: string,
+): Promise<OccupancyRow[]> => {
+  const props = await findPropertiesByOwnerId(ownerId);
+  const results: OccupancyRow[] = [];
+  for (const p of props) {
+    const unitsList = await findUnitsByPropertyId(p.id);
+    const occupiedCount = unitsList.filter((u) => u.tenantId !== null).length;
+    const vacantCount = unitsList.length - occupiedCount;
+    results.push({
+      propertyId: p.id,
+      propertyName: p.name,
+      totalUnits: unitsList.length,
+      occupiedCount,
+      vacantCount,
+    });
+  }
+  return results;
+};
+
+export const findOccupancyByManagerId = async (
+  managerId: string,
+): Promise<OccupancyRow[]> => {
+  const props = await findPropertiesByManagerId(managerId);
+  const results: OccupancyRow[] = [];
+  for (const p of props) {
+    const unitsList = await findUnitsByPropertyId(p.id);
+    const occupiedCount = unitsList.filter((u) => u.tenantId !== null).length;
+    const vacantCount = unitsList.length - occupiedCount;
+    results.push({
+      propertyId: p.id,
+      propertyName: p.name,
+      totalUnits: unitsList.length,
+      occupiedCount,
+      vacantCount,
+    });
+  }
+  return results;
+};

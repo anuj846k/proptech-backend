@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import {
   createPropertyController,
+  getOccupancyController,
   getPropertiesController,
   getPropertyByIdController,
   assignManagerController,
 } from './property.controllers';
-import { createUnitController } from '../unit/unit.controllers';
+import {
+  createUnitController,
+  assignTenantToUnitController,
+} from '../unit/unit.controllers';
 import { isAuthenticated, authorizeRoles } from '../user/user.middlewares';
 
 const propertyRouter: Router = Router();
@@ -22,6 +26,13 @@ propertyRouter.get(
   isAuthenticated,
   authorizeRoles('ADMIN', 'MANAGER'),
   getPropertiesController,
+);
+
+propertyRouter.get(
+  '/occupancy',
+  isAuthenticated,
+  authorizeRoles('ADMIN', 'MANAGER'),
+  getOccupancyController,
 );
 
 propertyRouter.get(
@@ -43,6 +54,13 @@ propertyRouter.post(
   isAuthenticated,
   authorizeRoles('ADMIN', 'MANAGER'),
   createUnitController,
+);
+
+propertyRouter.patch(
+  '/:id/units/:unitId',
+  isAuthenticated,
+  authorizeRoles('ADMIN', 'MANAGER'),
+  assignTenantToUnitController,
 );
 
 export default propertyRouter;

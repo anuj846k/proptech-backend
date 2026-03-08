@@ -11,4 +11,9 @@ export const createUnitSchema = z.object({
   tenantId: z.uuid({ message: 'Invalid tenant ID' }).optional().nullable(),
 });
 
+export const assignTenantSchema = z.object({
+  tenantId: z.uuid({ message: 'Invalid tenant ID' }).nullable(),
+});
+
 export type CreateUnitInput = z.infer<typeof createUnitSchema>;
+export type AssignTenantInput = z.infer<typeof assignTenantSchema>;

@@ -39,7 +39,7 @@ ticketRouter.get(
 ticketRouter.get(
   '/',
   isAuthenticated,
-  authorizeRoles('MANAGER'),
+  authorizeRoles('ADMIN', 'MANAGER'),
   getAllTicketsController,
 );
 
@@ -58,14 +58,14 @@ ticketRouter.patch(
 ticketRouter.patch(
   '/:id',
   isAuthenticated,
-  authorizeRoles('MANAGER'),
+  authorizeRoles('ADMIN', 'MANAGER'),
   updateTicketController,
 );
 
 ticketRouter.get(
   '/:id',
   isAuthenticated,
-  authorizeRoles('MANAGER', 'TENANT', 'TECHNICIAN'),
+  authorizeRoles('ADMIN', 'MANAGER', 'TENANT', 'TECHNICIAN'),
   getTicketByIdController,
 );
 

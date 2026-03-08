@@ -39,7 +39,12 @@ export const registerUser = asyncHandler(async (req, res) => {
   setCookies(res, accessToken, refreshToken);
 
   logger.info(`User registered successfully: ${email}`);
-  return successResponse(res, 'User registered successfully', {}, 201);
+  return successResponse(
+    res,
+    'User registered successfully',
+    { accessToken, refreshToken },
+    201,
+  );
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -53,7 +58,10 @@ export const loginUser = asyncHandler(async (req, res) => {
   setCookies(res, accessToken, refreshToken);
 
   logger.info(`User logged in successfully: ${email}`);
-  return successResponse(res, 'Login successful');
+  return successResponse(res, 'Login successful', {
+    accessToken,
+    refreshToken,
+  });
 });
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
@@ -100,7 +108,7 @@ export const updateUserById = asyncHandler(async (req, res) => {
 });
 
 export const refreshToken = asyncHandler(async (req, res) => {
-  const token = req.cookies.refresh_token;
+  const token = req.body?.refreshToken || req.cookies.refresh_token;
   if (!token) {
     throw new AppError('Refresh token missing', 401);
   }
@@ -109,7 +117,10 @@ export const refreshToken = asyncHandler(async (req, res) => {
     userService.refreshAccessToken(token);
   setCookies(res, accessToken, newRefreshToken);
 
-  return successResponse(res, 'Token refreshed successfully');
+  return successResponse(res, 'Token refreshed successfully', {
+    accessToken,
+    refreshToken: newRefreshToken,
+  });
 });
 
 export const logoutUser = (_req: Request, res: Response) => {

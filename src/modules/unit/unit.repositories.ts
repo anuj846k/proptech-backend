@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '#db/db';
 import { units } from './unit.models';
+import { properties } from '../property/property.models';
 type CreateUnitRepoInput = {
   propertyId: string;
   unitNumber: string;
@@ -20,6 +21,11 @@ export const createUnit = async (data: CreateUnitRepoInput) => {
   return unit ?? null;
 };
 
+export const findUnitById = async (id: string) => {
+  const [unit] = await db.select().from(units).where(eq(units.id, id)).limit(1);
+  return unit ?? null;
+};
+
 export const findUnitByPropertyAndNumber = async (
   propertyId: string,
   unitNumber: string,
@@ -32,4 +38,39 @@ export const findUnitByPropertyAndNumber = async (
     )
     .limit(1);
   return unit ?? null;
+};
+
+export const updateUnitTenant = async (
+  unitId: string,
+  tenantId: string | null,
+) => {
+  const [updated] = await db
+    .update(units)
+    .set({ tenantId })
+    .where(eq(units.id, unitId))
+    .returning();
+  return updated ?? null;
+};
+
+export type MyUnitRow = {
+  unitId: string;
+  unitNumber: string;
+  propertyId: string;
+  propertyName: string;
+};
+
+export const findUnitsByTenantIdWithProperty = async (
+  tenantId: string,
+): Promise<MyUnitRow[]> => {
+  const rows = await db
+    .select({
+      unitId: units.id,
+      unitNumber: units.unitNumber,
+      propertyId: properties.id,
+      propertyName: properties.name,
+    })
+    .from(units)
+    .innerJoin(properties, eq(units.propertyId, properties.id))
+    .where(eq(units.tenantId, tenantId));
+  return rows;
 };

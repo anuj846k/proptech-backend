@@ -1,4 +1,4 @@
-## Protech Backend – Docker & Local Setup
+## Proptech Backend – Docker & Local Setup
 
 This document explains how to:
 

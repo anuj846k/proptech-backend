@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "property_name_owner_idx" ON "properties" USING btree ("name","owner_id");

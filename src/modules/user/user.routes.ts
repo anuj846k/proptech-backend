@@ -27,13 +27,13 @@ userRouter.get(
 userRouter.put(
   '/users/:id',
   isAuthenticated,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  authorizeRoles('ADMIN'),
   updateUserById,
 );
 userRouter.get(
   '/users/:id',
   isAuthenticated,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  authorizeRoles('ADMIN'),
   getUserById,
 );
 

@@ -1,3 +1,13 @@
+## System Architecture of backend
+
+The high‑level architecture of the backend is shown below.  
+It illustrates the users flowing through an `nginx` load balancer and API gateway to the individual backend services, with PostgreSQL and Cloudinary for data and file storage.
+
+![Backend system architecture](./postman/arch.png)
+
+Frontend repository (Next.js app): [Proptech-frontend](https://github.com/anuj846k/Proptech-frontend)
+
+
 ## Proptech Backend – Docker & Local Setup
 
 This document explains how to:

@@ -74,7 +74,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const { role } = req.query;
+  const { role, page, limit } = req.query;
 
   let roleFilter: UserRole | undefined;
 
@@ -85,8 +85,31 @@ export const getUsers = asyncHandler(async (req, res) => {
     roleFilter = role as UserRole;
   }
 
-  const users = await userService.getUsers(roleFilter);
-  return successResponse(res, 'Users fetched successfully', { users });
+  const pageNum = page ? Number(page) : undefined;
+  const limitNum = limit ? Number(limit) : undefined;
+
+  if (pageNum !== undefined && (isNaN(pageNum) || pageNum < 1)) {
+    throw new AppError('Invalid page number', 400);
+  }
+  if (
+    limitNum !== undefined &&
+    (isNaN(limitNum) || limitNum < 1 || limitNum > 100)
+  ) {
+    throw new AppError('Invalid limit (1-100)', 400);
+  }
+
+  const { users, total } = await userService.getUsers(
+    roleFilter,
+    pageNum,
+    limitNum,
+  );
+  return successResponse(res, 'Users fetched successfully', {
+    users,
+    total,
+    page: pageNum ?? 1,
+    limit: limitNum ?? total,
+    totalPages: limitNum ? Math.ceil(total / limitNum) : 1,
+  });
 });
 
 export const getUserById = asyncHandler(async (req, res) => {

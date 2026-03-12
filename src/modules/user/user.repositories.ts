@@ -1,4 +1,4 @@
-import { eq, or } from 'drizzle-orm';
+import { count, eq, or } from 'drizzle-orm';
 import { db } from '#db/db';
 import { AppError } from '#utils/error';
 import { users } from './user.models';
@@ -51,21 +51,39 @@ export const findUserById = async (id: string) => {
   return user || null;
 };
 
-export const listUsers = async (role?: UserRole): Promise<PublicUser[]> => {
-  const query = db.select().from(users);
+export const listUsers = async (
+  role?: UserRole,
+  page?: number,
+  limit?: number,
+): Promise<{ users: PublicUser[]; total: number }> => {
+  const whereClause = role ? eq(users.role, role) : undefined;
 
-  const rows = role
-    ? await db.select().from(users).where(eq(users.role, role))
-    : await query;
+  const [countResult] = await db
+    .select({ total: count() })
+    .from(users)
+    .where(whereClause);
+  const total = countResult?.total ?? 0;
 
-  return rows.map((u) => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    phone: u.phone,
-    role: u.role,
-    createdAt: u.createdAt,
-  }));
+  let query = db.select().from(users).where(whereClause).$dynamic();
+
+  if (page !== undefined && limit !== undefined) {
+    const offset = (page - 1) * limit;
+    query = query.limit(limit).offset(offset);
+  }
+
+  const rows = await query;
+
+  return {
+    users: rows.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      phone: u.phone,
+      role: u.role,
+      createdAt: u.createdAt,
+    })),
+    total,
+  };
 };
 export const updateUserById = async (
   id: string,

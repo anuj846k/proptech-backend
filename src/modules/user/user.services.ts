@@ -4,7 +4,7 @@ import { hashPassword, VerifyPassword } from '#utils/argon';
 import { AppError } from '#utils/error';
 import logger from '#utils/logger';
 import { formatZodError } from '#utils/zod';
-import { userSchema, updateUserSchema } from '#validations/user.validations';
+import { updateUserSchema, userSchema } from '#validations/user.validations';
 import {
   findExistingUser,
   findUserById,
@@ -125,9 +125,15 @@ export const getCurrentUser = async (userId: string) => {
   return toPublicUser(user);
 };
 
-export const getUsers = async (role?: UserRole) => {
-  logger.info(`Listing users${role ? ` with role: ${role}` : ''}`);
-  return listUsers(role);
+export const getUsers = async (
+  role?: UserRole,
+  page?: number,
+  limit?: number,
+) => {
+  logger.info(
+    `Listing users${role ? ` with role: ${role}` : ''}${page ? ` page: ${page}` : ''}`,
+  );
+  return listUsers(role, page, limit);
 };
 
 const toPublicUser = (u: PublicUser): PublicUser => ({

@@ -9,6 +9,7 @@ import express, {
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { config } from '#config/env';
+import { pool } from '#db/db';
 import activityRouter from '#modules/activity/activity.routes';
 import notificationRouter from '#modules/notification/notification.routes';
 import propertyRouter from '#modules/property/property.routes';
@@ -51,12 +52,27 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
+app.get('/health', async (req, res) => {
+  const checks: Record<string, string> = {};
+  let overallStatus = 'ok';
+
+  try {
+    const result = await pool.query('SELECT 1 as health');
+    checks.database = result.rows[0]?.health === 1 ? 'ok' : 'error';
+    if (checks.database !== 'ok') {
+      overallStatus = 'degraded';
+    }
+  } catch {
+    checks.database = 'error';
+    overallStatus = 'unhealthy';
+  }
+
+  const statusCode = overallStatus === 'ok' ? 200 : 503;
+  res.status(statusCode).json({
+    status: overallStatus,
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    message: 'Server is healthy',
+    checks,
     instance: instanceId,
   });
 });

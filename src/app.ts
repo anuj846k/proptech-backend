@@ -7,14 +7,15 @@ import express, {
   type Response,
 } from 'express';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 import { config } from '#config/env';
 import activityRouter from '#modules/activity/activity.routes';
-
 import notificationRouter from '#modules/notification/notification.routes';
 import propertyRouter from '#modules/property/property.routes';
 import ticketRouter from '#modules/ticket/ticket.routes';
 import unitRouter from '#modules/unit/unit.routes';
 import userRouter from '#modules/user/user.routes';
+import { openApiSpec } from '#openapi/spec';
 import { AppError } from '#utils/error';
 import logger from '#utils/logger';
 import { rateLimiterMiddleware } from '#utils/rateLimiter';
@@ -66,6 +67,23 @@ app.get('/api', (req, res) => {
     instance: instanceId,
   });
 });
+app.get('/docs/openapi.json', (_req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json(openApiSpec);
+});
+
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(openApiSpec, {
+    swaggerOptions: {
+      docExpansion: 'list',
+      displayRequestDuration: true,
+      persistAuthorization: true,
+      url: '/docs/openapi.json',
+    },
+  }),
+);
 
 app.use('/api/v1', rateLimiterMiddleware);
 app.use('/api/v1/users', userRouter);

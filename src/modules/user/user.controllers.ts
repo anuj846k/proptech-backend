@@ -10,7 +10,7 @@ import { ALLOWED_USER_ROLES, type UserRole } from './user.types';
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: config.nodeEnv === 'production',
-  sameSite: 'strict' as const,
+  sameSite: 'lax' as const,
 };
 
 const ACCESS_COOKIE_MAX_AGE = 15 * 60 * 1000;
